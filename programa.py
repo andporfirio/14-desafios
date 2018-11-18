@@ -15,25 +15,32 @@ def rodar_programa():
 	list_csv = import_csv()
 	for line in list_csv:
 		ldap_users = {
-			'nome':'',
-			'sobrenome':'',
-			'email':'',
-			'password':''
+			'objectclass': 'inetOrgPerson',
+			'cn':'',
+			'sn':'',
+			'mail':'',
+			'userpassword':'',
+			'uid':'',
+			'pwdMinAge': 0
 			}
 		password = pass_generator()
 		a = line.split(';')
-		conta = a[0].lower() + '.' + a[1].lower()
+		conta = line[0].lower() + a[1].lower()
 		a.append(password)
 		a.append(conta)
-		ldap_users.update(nome = a[0])
-		ldap_users.update(sobrenome = a[1])
-		ldap_users.update(email = a[2])
-		ldap_users.update(password = a[3])
-		ldap_users.update(conta = a[-1])
+		ldap_users.update(cn = a[0] + ' ' + a[1])
+		ldap_users.update(sn = a[1])
+		ldap_users.update(mail = a[2])
+		ldap_users.update(userpassword = a[3])
+		ldap_users.update(uid = a[-1])
 
 		users.append(ldap_users)
 
-	print(users)
+	for line in users:
+		print('dn: cn={},ou=people,dc=example,dc=com').format(line.get('cn'))
+		for k,v in line.items():
+			print('{}: {}').format(k,v)
+			
 
 
 	# 	for line in a:
