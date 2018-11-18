@@ -1,6 +1,7 @@
 #!/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division, print_function
 import csv
 import sys
 import os
@@ -8,8 +9,8 @@ import os
 #Modulo para importacao do arquivo csv 
 
 def import_csv():
-
-	file = input('Digite o nome do arquivo .csv: ')
+	default = 'users.csv'
+	file = raw_input('Digite o nome do arquivo .csv [users.csv]: ') or 'users.csv'
 	list_files = []
 	try:
 		if '.csv' in file:
