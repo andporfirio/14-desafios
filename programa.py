@@ -38,53 +38,34 @@ def rodar_programa():
 		ldap_users.update(uid = a[-1])
 		users.append(ldap_users)
 
-	# print("Sending account data to mail users.\n")
-
-	# for line in users:
-	# 	print('Sending mail to: {}'.format(line.get('mail')))
-	# 	sending_email(line.get('mail'),line.get('uid'),line.get('userpassword'))
-
-	print('Save users account on database.')
+	print("Sending account data to mail users.\n########")
 
 	for line in users:
-		for k,v in line.items():
-			cols_info = k
-			vals_info = v
-			insert_info = ("INSERT INTO UsersInfo (%s) VALUES ('%s')" %(k,v))
-			conn_sql(insert_info)
+		print('Sending mail to: {}'.format(line.get('mail')))
+		sending_email(line.get('mail'),line.get('uid'),line.get('userpassword'))
+
+	ask = raw_input('Do you want save the users account on a database? [Y/N]: ')
+	if ask == 'Y':
+		print('Save users account on database.\n########')
+
+		for line in users:
+			cols_info = line.keys()
+			vals_info = line.values()
+			insert_info = ("INSERT INTO UsersInfo ({}) VALUES ({})").format(', '.join(cols_info),vals_info)
+			data = (insert_info.replace('[','').replace(']',''))
+			conn_sql(data)
 			
-		# insert_info = ("INSERT INTO UsersInfo ({}) VALUES ({})").format(cols_info,vals_info)
-		# print(insert_info)
-		# insert_info = ("INSERT INTO UsersInfo ({}) VALUES ('{}')"
-		# 			  .format(cols_info,vals_info)
-					  # .format(",".join(cols_info), "','".join(vals_info)))
-		#conn_sql(insert_info)	
-        # cols_info = line.keys()
-        # vals_info = line.values()
-        # insert_info = ("INSERT INTO UsersInfo (%s) VALUES ('%s')" %
-        # 	(",".join(cols_info), "','".join(vals_info)))
-        # conn_sql(insert_info)
+		print('Print ldif output.\n########')
+		for line in users:
+			print('dn: cn=%s,ou=people,dc=example,dc=com' %(line.get('cn')))
 
-
-
-
-	# for line in users:
-	# 	print('dn: cn={},ou=people,dc=example,dc=com').format(line.get('cn'))
-	# 	for k,v in line.items():
-	# 		print('{}: {}').format(k,v)
-
-
-
-	# 	for line in a:
-	# 		ldap_users.update(nome = line[0])
-	# 		ldap_users.update(sobrenome = line[1])
-	# 		ldap_users.update(email = line[2])
-	# 		ldap_users.update(password = line[-1])
-	# 		users.append(ldap_users)
-	# print(user)
-
-
-		
-
+	elif ask == 'N':
+		print('Print ldif output.\n########')
+		for line in users:
+			print('dn: cn=%s,ou=people,dc=example,dc=com' %(line.get('cn')))
+			for k,v in line.items():
+				print('%s: %s' %(k,v))
+	else:
+		print('Invalid Option')
 
 rodar_programa()
